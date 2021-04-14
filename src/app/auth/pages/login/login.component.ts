@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+// Validators
 import { FormValidatorsService } from '../../../shared/services/form-validators.service';
 
 @Component({
@@ -11,18 +13,19 @@ import { FormValidatorsService } from '../../../shared/services/form-validators.
 export class LoginComponent {
 
   public form: FormGroup = this.fb.group({
-    email: ['', 
+    email: ['test@email.com', 
             [ Validators.required,
             Validators.pattern(this.vs.email_pattern) ]
             ],
-    password: ['',  
+    password: ['123456hfkfhskhBMBuk_NBNMBD',  
             [ Validators.required,
             Validators.minLength(6) ]
             ]
   });
 
   constructor( private fb: FormBuilder, 
-              private vs: FormValidatorsService) { }
+              private vs: FormValidatorsService,
+              private router: Router) { }
 
 
   login(): void {
@@ -30,9 +33,11 @@ export class LoginComponent {
       this.form.markAllAsTouched();
       return;
     };
-
+    
+    this.router.navigateByUrl('/protected');
     console.log(this.form.value);
     console.log(this.form.valid);
+
   }
 
 }
