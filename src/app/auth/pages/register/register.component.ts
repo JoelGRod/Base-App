@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 // Validators
 import { FormValidatorsService } from 'src/app/shared/services/form-validators.service';
+// Services
+import { AuthService } from '../../services/auth.service';
+// Sweet Alert
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -13,15 +17,15 @@ import { FormValidatorsService } from 'src/app/shared/services/form-validators.s
 export class RegisterComponent {
 
   public form: FormGroup = this.fb.group({
-    name: ['joel', 
+    name: ['', 
           [ Validators.required,
             Validators.minLength(3) ]
           ],
-    email: ['test@email.com',
+    email: ['',
           [ Validators.required, 
             Validators.pattern(this.vs.email_pattern) ]
           ],
-    password: ['123456hfkfhskhBMBuk_NBNMBD',
+    password: ['',
           [ Validators.required,
             Validators.minLength(6) ]
           ]
@@ -29,7 +33,8 @@ export class RegisterComponent {
 
   constructor(private fb: FormBuilder,
               private vs: FormValidatorsService,
-              private router: Router) { }
+              private router: Router,
+              private authService: AuthService) { }
 
   register(): void {
     if(this.form.invalid) {
@@ -37,10 +42,24 @@ export class RegisterComponent {
       return;
     }
 
-    this.router.navigateByUrl('/protected');
-
-    console.log(this.form.value);
-    console.log(this.form.valid);
+    const { name, email, password } = this.form.value;
+    this.authService.register_user(name, email, password)
+      .subscribe( resp => {
+        if(resp === true) {
+          this.router.navigateByUrl('/auth/login');
+          Swal.fire({
+            icon: 'success',
+            title: '',
+            text: 'User created successfully'
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: resp
+          })
+        }
+      });
   }
 
 }

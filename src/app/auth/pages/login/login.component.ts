@@ -17,11 +17,11 @@ import Swal from 'sweetalert2';
 export class LoginComponent {
 
   public form: FormGroup = this.fb.group({
-    email: ['test@test.com', 
+    email: ['', 
             [ Validators.required,
             Validators.pattern(this.vs.email_pattern) ]
             ],
-    password: ['123456',  
+    password: ['',  
             [ Validators.required,
             Validators.minLength(6) ]
             ]

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 // RXJS
-import { Observable, of } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 // Environment
 import { environment } from 'src/environments/environment';
@@ -43,6 +43,19 @@ export class AuthService {
       );
   }
 
+  public register_user(name: string, email: string, password: string) {
+    const url: string = `${this._base_url}/auth/new`;
+    const body = { name, email, password };
+
+    return this.http.post<AuthResponse>(url, body)
+      .pipe(
+        map( resp => {
+          return resp.ok;
+        }),
+        catchError( error => of(error.error.msg) )
+      );
+  }
+
   // validate-token Guard
   public renew_token(): Observable<boolean> {
     const url: string = `${this._base_url}/auth/renew`;
@@ -63,5 +76,9 @@ export class AuthService {
         }),
         catchError( error => of(false))
       );
+  }
+
+  public logout(): void {
+    localStorage.clear();
   }
 }

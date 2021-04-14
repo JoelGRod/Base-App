@@ -24,6 +24,7 @@ export class MainComponent {
               private authService: AuthService) { }
 
   logout(): void {
+    this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 
