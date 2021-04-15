@@ -30,15 +30,6 @@ export class AuthService {
     return this.http.post<AuthResponse>(url, body)
       .pipe(
         map( resp => {
-          // if( resp.ok ) {
-          //   localStorage.setItem('token', resp.token!);
-          //   this._user = {
-          //     uid: resp.uid!,
-          //     name: resp.name!,
-          //     email: resp.email!
-          //   };
-          // }
-          // return resp.ok
           return this.resp_ok(resp);
         }),
         catchError( error => of(error.error.msg) )
@@ -67,15 +58,6 @@ export class AuthService {
     return this.http.get<AuthResponse>(url, {headers: headers})
       .pipe(
         map( resp => {
-          // if( resp.ok ) {
-          //   localStorage.setItem('token', resp.token!);
-          //   this._user = {
-          //     uid: resp.uid!,
-          //     name: resp.name!,
-          //     email: resp.email!
-          //   };
-          // }
-          // return resp.ok
           return this.resp_ok(resp);
         }),
         catchError( error => of(false))
