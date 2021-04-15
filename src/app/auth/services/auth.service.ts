@@ -30,14 +30,16 @@ export class AuthService {
     return this.http.post<AuthResponse>(url, body)
       .pipe(
         map( resp => {
-          if( resp.ok ) {
-            localStorage.setItem('token', resp.token!);
-            this._user = {
-              uid: resp.uid!,
-              name: resp.name!
-            };
-          }
-          return resp.ok
+          // if( resp.ok ) {
+          //   localStorage.setItem('token', resp.token!);
+          //   this._user = {
+          //     uid: resp.uid!,
+          //     name: resp.name!,
+          //     email: resp.email!
+          //   };
+          // }
+          // return resp.ok
+          return this.resp_ok(resp);
         }),
         catchError( error => of(error.error.msg) )
       );
@@ -65,14 +67,16 @@ export class AuthService {
     return this.http.get<AuthResponse>(url, {headers: headers})
       .pipe(
         map( resp => {
-          if( resp.ok ) {
-            localStorage.setItem('token', resp.token!);
-            this._user = {
-              uid: resp.uid!,
-              name: resp.name!
-            };
-          }
-          return resp.ok
+          // if( resp.ok ) {
+          //   localStorage.setItem('token', resp.token!);
+          //   this._user = {
+          //     uid: resp.uid!,
+          //     name: resp.name!,
+          //     email: resp.email!
+          //   };
+          // }
+          // return resp.ok
+          return this.resp_ok(resp);
         }),
         catchError( error => of(false))
       );
@@ -80,5 +84,17 @@ export class AuthService {
 
   public logout(): void {
     localStorage.clear();
+  }
+
+  private resp_ok(resp: AuthResponse): boolean {
+    if( resp.ok ) {
+      localStorage.setItem('token', resp.token!);
+      this._user = {
+        uid: resp.uid!,
+        name: resp.name!,
+        email: resp.email!
+      };
+    }
+    return resp.ok
   }
 }
